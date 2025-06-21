@@ -43,7 +43,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git add betting_tips.xlsx || echo "No Excel file to add"
           git commit -m "Auto update betting tips [skip ci]" || echo "Nothing to commit"
-          git push origin HEAD:main
+          git push https://x-access-token:${TOKEN}@github.com/mahmad789/alerts.git HEAD:main
+
