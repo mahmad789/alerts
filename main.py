@@ -62,11 +62,32 @@ def save_current_data(data_dict):
     df = pd.DataFrame(all_data)
     df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
 
+# def send_email_alert(new_data):
+#     subject = "New Active Betting Suggestion Alert"
+#     body = "New betting suggestions found:\n\n"
+#     for name, items in new_data.items():
+#         body += f"\n🧠 {name.upper()}:\n" + "\n".join(items) + "\n"
+
+#     msg = MIMEText(body)
+#     msg["Subject"] = subject
+#     msg["From"] = EMAIL_FROM
+#     msg["To"] = EMAIL_TO
+
+#     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+#         server.starttls()
+#         server.login(EMAIL_FROM, EMAIL_PASSWORD)
+#         server.send_message(msg)
+
+
 def send_email_alert(new_data):
     subject = "New Active Betting Suggestion Alert"
     body = "New betting suggestions found:\n\n"
+    
     for name, items in new_data.items():
-        body += f"\n🧠 {name.upper()}:\n" + "\n".join(items) + "\n"
+        url = URLS.get(name, "")
+        body += f"\n🧠 {name.upper()} ({url}):\n"  # URL add kiya
+        for tip in items:
+            body += f"- {tip}\n"
 
     msg = MIMEText(body)
     msg["Subject"] = subject
@@ -77,6 +98,7 @@ def send_email_alert(new_data):
         server.starttls()
         server.login(EMAIL_FROM, EMAIL_PASSWORD)
         server.send_message(msg)
+
 
 def monitor():
     print("Monitoring started...")
