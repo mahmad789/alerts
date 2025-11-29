@@ -93,11 +93,20 @@ def send_email_alert(new_data):
     msg["Subject"] = subject
     msg["From"] = EMAIL_FROM
     msg["To"] = EMAIL_TO
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_FROM, EMAIL_PASSWORD)
+            server.send_message(msg)
+            print("Email sent successfully.")
+    except Exception as e:
+        print("Error sending email:", e)
 
-    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-        server.starttls()
-        server.login(EMAIL_FROM, EMAIL_PASSWORD)
-        server.send_message(msg)
+
+    # with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+    #     server.starttls()
+    #     server.login(EMAIL_FROM, EMAIL_PASSWORD)
+    #     server.send_message(msg)
 
 
 def monitor():
